@@ -6,3 +6,6 @@ My name is Ellen Qing Zhang
 
 # Personal credo
 Curiosity
+
+# Email
+Qing.zhang@sas.com
