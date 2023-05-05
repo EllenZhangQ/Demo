@@ -1,3 +1,8 @@
 # Demo
 This is demo for learning github
-Add br1 
+
+# Who am I?
+My name is Ellen Qing Zhang
+
+#Personal credo
+Curiosity
