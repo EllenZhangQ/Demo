@@ -3,4 +3,3 @@
 # pylint: disable=line-too-long
 
 print("Hello, GitHUB!")
-print("Using pull request")
