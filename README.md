@@ -1,3 +1,4 @@
+![example workflow](https://github.com/EllenZhangQ/Demo/actions/workflows/c-cpp.yml/badge.svg)
 # Demo
 This is demo for learning github
 
