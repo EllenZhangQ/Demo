@@ -1,5 +1,19 @@
 {
     "files.exclude": {
         "**/.git": false
-    }
+    },
+    
+    "makefile.configurations": [
+        {
+            "name": "Default",
+            "makeArgs": []
+        },
+        {
+            "name": "Print make version",
+            "makeArgs": ["--version"]
+        }
+    ]
 }
+
+
+
