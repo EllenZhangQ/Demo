@@ -3,14 +3,18 @@
 #
 #.DEFAULT_GOAL := HelloCplusCplus.cpp
 
-all: clean hello
+all: clean hello artifact
 
 hello: HelloCplusCplus.o 
-	g++ -o hello HelloCplusCplus.o
+	g++ -o hello.exe HelloCplusCplus.o
 
 HelloCplusCplus.o: HelloCplusCplus.cpp
 	g++ -c HelloCplusCplus.cpp
 
+artifact:
+	mkdir artifact
+	mv HelloCplusCplus.o ./artifact
+	mv hello.exe ./artifact
 clean: 
 	rm -rf ./*.o
 

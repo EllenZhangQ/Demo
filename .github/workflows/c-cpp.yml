@@ -14,9 +14,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: say hello
-      run: echo Hello Ellen!
+    - name: create artifact directory
+      run: mkdir -p artifact
+
+    - run: echo hello Ellen! > artifact/hello.txt
     
-    - name: make
+    - name: build with make
       run: make
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+          name: hello
+          path: artifact
+
+
+
 
