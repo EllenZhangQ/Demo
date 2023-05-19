@@ -19,8 +19,13 @@ jobs:
 
     - run: echo hello Ellen! > artifact/hello.txt
     
-    - name: build with make
+    - name: Build
       run: make
+
+      
+    - name: Run
+      #run: chmod 755 ./artifact/hello.exe
+      run: ./artifact/hello.exe
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
@@ -28,7 +33,5 @@ jobs:
           name: hello
           path: artifact
 
-    - name: execute hello
-      run:  ./artifact/hello.exe
 
 

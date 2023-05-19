@@ -1,9 +1,8 @@
 #
 # A simple makefile for compiling a c++ project
 #
-#.DEFAULT_GOAL := HelloCplusCplus.cpp
 
-all: clean hello artifact
+all: clean hello package
 
 hello: HelloCplusCplus.o 
 	g++ -o hello.exe HelloCplusCplus.o
@@ -11,10 +10,11 @@ hello: HelloCplusCplus.o
 HelloCplusCplus.o: HelloCplusCplus.cpp
 	g++ -c HelloCplusCplus.cpp
 
-artifact:
-	mkdir artifact
-	mv HelloCplusCplus.o ./artifact
+package:
+	chmod 755 ./artifact/hello.exe
 	mv hello.exe ./artifact
+	mv HelloCplusCplus.o ./artifact
+
 clean: 
 	rm -rf ./*.o
 
