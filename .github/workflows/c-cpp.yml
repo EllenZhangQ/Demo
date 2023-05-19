@@ -28,6 +28,7 @@ jobs:
           name: hello
           path: artifact
 
-
+    - name: execute hello
+      run:  ./artifact/hello.exe
 
 
