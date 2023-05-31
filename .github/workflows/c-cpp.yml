@@ -22,11 +22,16 @@ jobs:
     - name: Build
       run: make
 
-      
+  Run: 
+    runs-on: ubuntu-latest
+    steps: 
     - name: Run
       #run: chmod 755 ./artifact/hello.exe
       run: ./artifact/hello.exe
 
+  Artifact: 
+    runs-on: ubuntu-latest
+    steps: 
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
