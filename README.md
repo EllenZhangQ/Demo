@@ -9,4 +9,4 @@ My name is Ellen Qing Zhang
 Curiosity
 
 # Email
-Qing.zhang@sas.com
+Qing.zhang@github.com
