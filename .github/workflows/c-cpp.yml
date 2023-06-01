@@ -39,9 +39,9 @@ jobs:
     needs: [pre-build, build]
     runs-on: ubuntu-latest
     steps:
-      - name: Run
-        #run: chmod 755 ./artifact/hello.exe
-        run: ./artifact/hello.exe
+      - name: Run shell script
+        run: ./.github/scripts/build.sh
+        shell: bash
 
   package:
     needs: [pre-build, build, post-build]
