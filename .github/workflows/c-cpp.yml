@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run shell script
-        run: ./.github/scripts/build.sh
+        run: ${{ github.workspace }}/.github/scripts/build.sh
         shell: bash
 
   package:
