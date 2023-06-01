@@ -1,37 +1,62 @@
-name: C/C++ CI
-
+name: demo-workflow
+#Triggers for events
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
-  build:
-
+  
+  pre-build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
+      - name: create artifact directory
+        run: mkdir -p artifact   
 
-    - name: create artifact directory
-      run: mkdir -p artifact
+  build:
+    needs: pre-build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
 
-    - run: echo hello Ellen! > artifact/hello.txt
-    
-    - name: Build
-      run: make
+      - name: Build
+        run: make
+  
+  post-build:
+    needs: [pre-build, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "This job's status is ${{ job.status }}."
+  test:
+    needs: [pre-build, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run
+        #run: chmod 755 ./artifact/hello.exe
+        run: ./artifact/hello.exe
 
-      
-    - name: Run
-      #run: chmod 755 ./artifact/hello.exe
-      run: ./artifact/hello.exe
+  package:
+    needs: [pre-build, build, post-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: hello
+            path: ./artifact
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
-      with:
-          name: hello
-          path: artifact
+  
+
+     
+  
 
 
   Explore-GitHub-Actions:
