@@ -35,12 +35,20 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "This job's status is ${{ job.status }}."
+    
   test:
     needs: [pre-build, build]
     runs-on: ubuntu-latest
     steps:
+      - name: Display the path
+        run: |
+          import os
+          print(os.environ['PATH'])
+        shell: python      
       - name: Run shell script
-        run: ./.github/scripts/build.sh
+        #run: .github/scripts/build.sh
+        run: ls -l ${{ github.workspace }}
+                
         shell: bash
 
   package:
