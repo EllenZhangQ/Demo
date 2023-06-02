@@ -10,8 +10,8 @@ jobs:
   pre-build:
     runs-on: ubuntu-latest
     steps:
-      - name: create artifact directory
-        run: mkdir -p artifact   
+      - name: Clearn temp
+        run: rm -rf .   
 
   build:
     needs: pre-build
@@ -26,16 +26,15 @@ jobs:
 
       - name: Build
         run: make
-  
-  post-build:
-    needs: [pre-build, build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "This job's status is ${{ job.status }}."
-    
+
+      - name: Run
+        run: ./artifact/hello.exe
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: hello
+            path: ./artifact
   test:
     needs: [pre-build, build]
     runs-on: ubuntu-latest
@@ -44,21 +43,18 @@ jobs:
         run: |
           import os
           print(os.environ['PATH'])
-        shell: python      
+          shell: python      
       - name: Run shell script
-        #run: .github/scripts/build.sh
-        run: ls -l ${{ github.workspace }}
-                
+        run: .github/scripts/build.sh                
         shell: bash
+        
 
-  package:
-    needs: [pre-build, build, test, post-build]
+  post-build:
+    needs: [pre-build, build, test]
     runs-on: ubuntu-latest
     steps:
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-            name: hello
-            path: ./artifact
-
-  
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "This job's status is ${{ job.status }}."
+    
