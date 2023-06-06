@@ -10,8 +10,8 @@ jobs:
   pre-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Clearn temp
-        run: rm -rf .   
+      - name: Clean artifact
+        run: rm -rf ./artifact   
 
   build:
     needs: pre-build
