@@ -34,7 +34,9 @@ jobs:
         run: make
 
       - name: Run build script
-        run: $GITHUB_WORKSPACE/scripts/build.sh
+        run: |
+          chmod 751 $GITHUB_WORKSPACE/scripts/build.sh
+          ./$GITHUB_WORKSPACE/scripts/build.sh
         shell: bash
 
       - name: Run
