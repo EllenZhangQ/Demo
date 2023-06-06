@@ -39,8 +39,10 @@ jobs:
     needs: [pre-build, build]
     runs-on: ubuntu-latest
     steps:     
+      - run: |
+          pwd
       - name: Run shell script
-        run: ./.github/scripts/build.sh                
+        run: ./scripts/build.sh                
         shell: bash
         
 
