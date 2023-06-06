@@ -10,9 +10,9 @@ jobs:
   pre-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Clean artifact directory
-        run: rm -rf *
-        working-directory: ./artifact
+      - name: Run build script
+        run: $GITHUB_WORKSPACE/scripts/build.sh
+        shell: bash
 
   build:
     needs: pre-build
@@ -42,10 +42,7 @@ jobs:
     steps:     
       - run: |
           pwd
-      - name: Run build script
-        run: $GITHUB_WORKSPACE/scripts/build.sh
-        shell: bash
-        
+       
 
   post-build:
     needs: [pre-build, build, test]
