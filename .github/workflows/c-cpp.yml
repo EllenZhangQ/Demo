@@ -10,9 +10,9 @@ jobs:
   pre-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Clean temp directory
+      - name: Clean artifact directory
         run: rm -rf *
-        working-directory: ./temp
+        working-directory: ./artifact
 
   build:
     needs: pre-build
