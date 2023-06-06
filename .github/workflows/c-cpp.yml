@@ -32,11 +32,11 @@ jobs:
 
       - name: Build
         run: make
-
-      - name: Run build script
-        run: |
-          chmod 751 $GITHUB_WORKSPACE/scripts/build.sh
-          ./$GITHUB_WORKSPACE/scripts/build.sh
+      
+      
+      - run: chmod 751 $GITHUB_WORKSPACE/scripts/build.sh
+      - name: Run build script        
+        run:  $GITHUB_WORKSPACE/scripts/build.sh
         shell: bash
 
       - name: Run
