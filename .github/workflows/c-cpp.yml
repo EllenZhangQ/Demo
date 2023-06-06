@@ -8,13 +8,14 @@ on:
 jobs:
   
   pre-build:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-20.04]
+        version: [10, 12, 14]
+    runs-on: ${{ matrix.os }}
     steps:
-      - run: ls -a $GITHUB_WORKSPACE > tmp
-      - run: cat tmp
-      - name: Run build script
-        run: $GITHUB_WORKSPACE/scripts/build.sh
-        shell: bash
+      - run: rm -rf tmp
 
   build:
     needs: pre-build
@@ -29,15 +30,12 @@ jobs:
         uses: actions/checkout@v3
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
 
-      # Initializes the CodeQL tools for scanning.
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: ${{ matrix.language }}
-
-
       - name: Build
         run: make
+
+      - name: Run build script
+        run: $GITHUB_WORKSPACE/scripts/build.sh
+        shell: bash
 
       - name: Run
         run: ./artifact/hello.exe
