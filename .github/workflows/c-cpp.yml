@@ -10,8 +10,9 @@ jobs:
   pre-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Clean artifact
-        run: rm -rf ./artifact   
+      - name: Clean temp directory
+        run: rm -rf *
+        working-directory: ./temp
 
   build:
     needs: pre-build
@@ -41,8 +42,8 @@ jobs:
     steps:     
       - run: |
           pwd
-      - name: Run shell script
-        run: ./scripts/build.sh                
+      - name: Run build script
+        run: $GITHUB_WORKSPACE/scripts/build.sh
         shell: bash
         
 
