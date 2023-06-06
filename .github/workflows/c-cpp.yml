@@ -10,7 +10,8 @@ jobs:
   pre-build:
     runs-on: ubuntu-latest
     steps:
-      - run: ls -a $GITHUB_WORKSPACE
+      - run: ls -a $GITHUB_WORKSPACE > tmp
+      - run: cat tmp
       - name: Run build script
         run: $GITHUB_WORKSPACE/scripts/build.sh
         shell: bash
