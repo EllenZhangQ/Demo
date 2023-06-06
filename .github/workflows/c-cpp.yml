@@ -38,12 +38,7 @@ jobs:
   test:
     needs: [pre-build, build]
     runs-on: ubuntu-latest
-    steps:
-      - name: Display the path
-        run: |
-          import os
-          print(os.environ['PATH'])
-          shell: python      
+    steps:     
       - name: Run shell script
         run: .github/scripts/build.sh                
         shell: bash
