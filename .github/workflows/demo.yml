@@ -1,0 +1,95 @@
+#Optional - The name of the workflow as it will appear in the "Actions" tab of the GitHub repository.
+name: demo-workflow
+
+#Optional - The name for workflow runs generated from the workflow, which will appear in the list of workflow runs on your repository's "Actions" tab. 
+run-name: ${{ github.actor }} is learning GitHub Actions
+#Triggers for events
+# Specifies the trigger for this workflow.
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  HELLO_WORD: "Welcome everyone to join GitHub exploring session."
+
+
+# Groups together all the jobs that run in the demo-workflow
+jobs:
+  # Defines a job named pre-build. The child keys will define properties of the job.
+  welcome:
+    runs-on: ubuntu-latest
+    # Groups together all the steps that run in the
+    steps:
+      - run: echo 'Hi ${{ env.HELLO_WORD }}'
+
+  pre-build:
+    # runs-on: ubuntu-latest
+    # creates a matrix with os and version keys
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-20.04]
+        version: [10, 12, 14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: rm -rf tmp
+
+  build:
+    needs: pre-build
+    # Configures the job to run on the latest version of an Ubuntu Linux runner.
+    runs-on: ubuntu-latest
+    # Groups together all the steps that run in the
+    steps:
+      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+
+      - name: Check out repository code
+      # The uses keyword specifies that this step will run v3 of the actions/checkout action.
+        uses: actions/checkout@v3        
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+
+      - name: Build
+        run: make
+      
+      # # Add scripts to currently workflow. 
+      - run: chmod 751 $GITHUB_WORKSPACE/scripts/build.sh
+      
+      # run a script as an action
+      - name: Run build script        
+        run:  $GITHUB_WORKSPACE/scripts/build.sh
+        shell: bash
+
+      - name: Run
+        run: ./artifact/hello.exe
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: hello
+            path: ./artifact
+  test:
+  # needs context shows information for two jobs that the current job depends on
+    needs: [pre-build, build]
+    runs-on: ubuntu-latest
+    steps:     
+      - run: |
+          pwd
+       
+
+  post-build:
+    needs: [pre-build, build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: hello
+      - run: echo "This job's status is ${{ job.status }}."
+    
