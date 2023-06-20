@@ -1,24 +1,30 @@
-#Optional - The name of the workflow as it will appear in the "Actions" tab of the GitHub repository.
+#The name of the workflow as it will appear in the "Actions" tab of the GitHub repository.
 name: demo-workflow
 
-#Optional - The name for workflow runs generated from the workflow, which will appear in the list of workflow runs on your repository's "Actions" tab. 
+#The name for workflow runs generated from the workflow, which will appear in the list of workflow runs on your repository's "Actions" tab. 
 run-name: ${{ github.actor }} is learning GitHub Actions
 #Triggers for events
 # Specifies the trigger for this workflow.
 on:
+  # This example uses the push event, so a workflow run is triggered every time someone pushes a change to the repository or merges a pull request. 
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+        # Sequence of patterns matched against refs/heads
+        branches:    
+        - main
+        - 'releases/**'
 
+# A map of variables that are available to the steps of all jobs in the workflow.
 env:
-  HELLO_WORD: "Welcome everyone to join GitHub exploring session."
+  HELLO_WORD: "Welcome everyone to join GitHub exploring session. This is Ellen."
 
 
 # Groups together all the jobs that run in the demo-workflow
 jobs:
-  # Defines a job named pre-build. The child keys will define properties of the job.
+  # Defines a job named welcome. The child keys will define properties of the job.
   welcome:
+    # A runner is a server that runs your workflows when they're triggered. Each runner can run a single job at a time.
     runs-on: ubuntu-latest
     # Groups together all the steps that run in the
     steps:
@@ -26,6 +32,7 @@ jobs:
 
   pre-build:
     # runs-on: ubuntu-latest
+    # A matrix strategy lets you use variables in a single job definition to automatically create multiple job runs that are based on the combinations of the variables.
     # creates a matrix with os and version keys
     strategy:
       matrix:
@@ -36,10 +43,14 @@ jobs:
       - run: rm -rf tmp
 
   build:
+    # By default, the jobs in your workflow all run in parallel at the same time. 
+    # If you have a job that must only run after another job has completed, you can use the needs keyword to create this dependency. 
+    # If one of the jobs fails, all dependent jobs are skipped; 
+    # needs context shows information for two jobs that the current job depends on
     needs: pre-build
     # Configures the job to run on the latest version of an Ubuntu Linux runner.
     runs-on: ubuntu-latest
-    # Groups together all the steps that run in the
+    # Groups together all the steps that run in this job.
     steps:
       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -47,6 +58,9 @@ jobs:
 
 
       - name: Check out repository code
+      # An action is a custom application for the GitHub Actions platform that performs a complex but frequently repeated task.
+      # Use an action to help reduce the amount of repetitive code that you write in your workflow files. 
+      # We can write your own actions, or we can find actions to use in your workflows in the GitHub Marketplace.
       # The uses keyword specifies that this step will run v3 of the actions/checkout action.
         uses: actions/checkout@v3        
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
@@ -57,7 +71,7 @@ jobs:
       # # Add scripts to currently workflow. 
       - run: chmod 751 $GITHUB_WORKSPACE/scripts/build.sh
       
-      # run a script as an action
+      # run a shell script as an action
       - name: Run build script        
         run:  $GITHUB_WORKSPACE/scripts/build.sh
         shell: bash
